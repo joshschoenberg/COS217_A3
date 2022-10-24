@@ -13,9 +13,10 @@ SymTable_T SymTable_new(void) {
         int value;
         struct Node *next;
     };
-    struct List {
+    struct SymTable_T {
         struct Node *first;
     };
+    return ;
 }
 
 void SymTable_free(SymTable_T oSymTable) {
