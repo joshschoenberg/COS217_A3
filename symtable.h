@@ -2,14 +2,14 @@
 /* symtable.h                                                         */
 /* Author: Josh Schoenberg                                            */
 /*--------------------------------------------------------------------*/
-#ifndef STACK_INCLUDED
-#define STACK_INCLUDED
+#ifndef SYMTABLE_INCLUDED
+#define SYMTABLE_INCLUDED
 #include <stddef.h>
 
-struct SymTable_T;
+
 /* A SymTable_T object is an unordered collection of bindings,
 containing a key and value pair. */
-typedef struct SymTable_T *SymTable_T;
+typedef struct SymTable *SymTable_T;
 
 /*--------------------------------------------------------------------*/
 
