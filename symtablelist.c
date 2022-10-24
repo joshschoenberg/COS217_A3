@@ -25,7 +25,7 @@ SymTable_T SymTable_new(void) {
         }
     oSymTable->symTableSize = 0;
     return oSymTable;
-}
+};
 
 void SymTable_free(SymTable_T oSymTable) {
     struct SymTableNode *psCurrentNode;
