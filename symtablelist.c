@@ -51,10 +51,6 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
     struct SymTableNode *psNewNode;
 
     assert(oSymTable != NULL);
-    if (oSymTable->psFirstNode == NULL) {
-        oSymTable->psFirstNode = calloc(1, sizeof(*pcKey));
-
-    }
     /* Go through oSymTable to check if pcKey already exists */
     if (SymTable_contains(oSymTable, pcKey)) {
         /* If it does, return 0. */
@@ -82,8 +78,18 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
     }
 
 int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
-    
-        assert(oSymTable != NULL);
+    struct SymTableNode *psCurrentNode;
+    struct SymTableNode *psNextNode;
+
+    assert(oSymTable != NULL);
+    /* If Symbol table contains pcKey, return 1 */
+
+    for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
+                                           psCurrentNode = psNextNode) {
+        psNextNode = psCurrentNode->next;
+        if (psCurrentNode->pcKey == *pcKey) /* Is that the right syntax?? */
+            return 1;
+}
 
     /* If Symbol table does not contain pcKey, return 0 */
     return 0;
