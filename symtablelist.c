@@ -53,6 +53,7 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
 
     char *pcKeyCopy;
     assert(oSymTable != NULL);
+    assert(pcKey != NULL);
     /* Go through oSymTable to check if pcKey already exists */
     if (SymTable_contains(oSymTable, pcKey)) {
         /* If it does, return 0. */
@@ -60,8 +61,8 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
     }
     
     /* If it does not, add it in and return 1. */
-    psNewNode = (struct SymTableNode*)calloc(1, sizeof(struct SymTableNode));
-        
+    /* psNewNode = (struct SymTableNode*)calloc(1, sizeof(struct SymTableNode)); */
+    psNewNode = (struct SymTableNode*)malloc(sizeof(struct SymTableNode));
     /* If insufficient mememory, return 0. */
     if (psNewNode == NULL)
         return 0;
