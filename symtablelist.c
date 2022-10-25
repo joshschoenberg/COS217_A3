@@ -82,18 +82,8 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
     }
 
 int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
-    struct SymTableNode *psCurrentNode;
-    struct SymTableNode *psNextNode;
-
-    assert(oSymTable != NULL);
-    /* If Symbol table contains pcKey, return 1 */
-
-    for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
-                                           psCurrentNode = psNextNode) {
-        psNextNode = psCurrentNode->next;
-        if (psCurrentNode->pcKey == *pcKey) /* Is that the right syntax?? */
-            return 1;
-}
+    
+        assert(oSymTable != NULL);
 
     /* If Symbol table does not contain pcKey, return 0 */
     return 0;
