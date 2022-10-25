@@ -385,7 +385,7 @@ static void testRemove(void)
 
 /* Test the SymTable_map() function. */
 
-static void testMap(void)
+/* static void testMap(void) */
 {
    SymTable_T oSymTable;
    char acJeter[] = "Jeter";
@@ -427,13 +427,13 @@ static void testMap(void)
    SymTable_map(oSymTable, printBindingSimple, NULL);
 
    SymTable_free(oSymTable);
-}
+} */
 
 /*--------------------------------------------------------------------*/
 
 /* Test a SymTable object that contains no bindings. */
 
-static void testEmptyTable(void)
+/* static void testEmptyTable(void)
 {
    SymTable_T oSymTable;
    char *pcValue;
@@ -463,7 +463,7 @@ static void testEmptyTable(void)
    SymTable_map(oSymTable, printBinding, "%s\t%s\n");
 
    SymTable_free(oSymTable);
-}
+} */
 
 /*--------------------------------------------------------------------*/
 
