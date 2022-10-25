@@ -143,7 +143,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     /* If first node contains pcKey, remove first node and replace 
     with second */
     if (strcmp(oSymTable->psFirstNode->pcKey, pcKey) == 0) {
-        void * oldValue = psNextNode->pvValue;
+        void * oldValue = oSymTable->psFirstNode->pvValue;
         psNextNode = oSymTable->psFirstNode->next;
         free(oSymTable->psFirstNode);
         oSymTable->psFirstNode = psNextNode;
