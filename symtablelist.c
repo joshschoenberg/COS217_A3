@@ -84,10 +84,8 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
 
     assert(oSymTable != NULL);
 
-    /* If oSymTable does not contain pcKey, return NULL. */
-    if (!SymTable_contains(oSymTable, pcKey))
-        return NULL;
-    /* Otherwise, find pcKey and replace its value with pvValue */
+    /* If oSymTable does not contain pcKey, return NULL.
+    Otherwise, find pcKey and replace its value with pvValue */
     for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
                                            psCurrentNode = psNextNode) {
         psNextNode = psCurrentNode->next;
