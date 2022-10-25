@@ -147,7 +147,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
         psNextNode = oSymTable->psFirstNode->next;
         free(oSymTable->psFirstNode);
         oSymTable->psFirstNode = psNextNode;
-        oSymTable->symTableSize--;
+        oSymTable->symTableSize -= 1;
         return oldValue;
         
     }
@@ -159,6 +159,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
             void * oldValue = psNextNode->pvValue;
             psCurrentNode->next = psNextNode->next;
             free(psNextNode);
+            oSymTable->symTableSize -= 1;
             return oldValue;
         }
     }
