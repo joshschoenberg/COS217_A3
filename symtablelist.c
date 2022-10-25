@@ -138,6 +138,6 @@ void SymTable_map(SymTable_T oSymTable,
 
     }
 
-int  main (void) {
+/* int  main (void) {
 
-}
+} */
