@@ -90,10 +90,11 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
     for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
                                            psCurrentNode = psNextNode) {
         psNextNode = psCurrentNode->next;
-        if ((strcmp(psCurrentNode->pcKey, pcKey)) == 0) 
+        if ((strcmp(psCurrentNode->pcKey, pcKey)) == 0) {
             oldValue = psCurrentNode->pvValue;
             psCurrentNode->pvValue = pvValue;
             return oldValue;
+        }
     }
 }
 int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
