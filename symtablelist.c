@@ -87,7 +87,7 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
                                            psCurrentNode = psNextNode) {
         psNextNode = psCurrentNode->next;
-        if (psCurrentNode->pcKey == *pcKey) /* Is that the right syntax?? */
+        if ((strcmp(psCurrentNode->pcKey, pcKey)) == 0) 
             return 1;
 }
 
