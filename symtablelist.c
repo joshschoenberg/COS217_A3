@@ -47,6 +47,9 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
 
  int SymTable_put(SymTable_T oSymTable, const char *pcKey, 
                                                   const void *pvValue) {
+    
+    struct SymTableNode *psNewNode;
+
     assert(oSymTable != NULL);
     if (oSymTable->psFirstNode == NULL) {
         oSymTable->psFirstNode = calloc(1, sizeof(*pcKey));
@@ -59,7 +62,6 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
     }
     
     /* If it does not, add it in and return 1. */
-        struct SymTableNode *psNewNode;
         psNewNode = (struct SymTable*)calloc(1, sizeof(struct SymTable));
         
         /* If insufficient mememory, return 0. */
@@ -80,7 +82,6 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
     }
 
 int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
-    assert(oSymTable != NULL);
     struct SymTableNode *psCurrentNode;
     struct SymTableNode *psNextNode;
 
