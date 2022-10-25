@@ -66,7 +66,7 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
         return 0;
         
     psNewNode->pcKey = pcKey;
-    psNewNode->pvValue = pvValue;
+    psNewNode->pvValue = (void *) pvValue;
     psNewNode->next = oSymTable->psFirstNode;
     oSymTable->psFirstNode = psNewNode;
 
