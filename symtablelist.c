@@ -149,6 +149,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
    
     struct SymTableNode *psCurrentNode;
     struct SymTableNode *psNextNode;
+    struct SymTableNode *psPreviousNode;
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
     /* If first node contains pcKey, remove first node and replace 
@@ -163,16 +164,18 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
         
     }
     /* If other node contains pcKey, remove that node */
+    psPreviousNode = NULL;
     for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
                                            psCurrentNode = psNextNode) {
         psNextNode = psCurrentNode->next;
-        if ((strcmp(psNextNode->pcKey, pcKey)) == 0) {      
-            void * oldValue = psNextNode->pvValue;
-            psCurrentNode->next = psNextNode->next;
-            free(psNextNode);
+        if ((strcmp(psCurrentNode->pcKey, pcKey)) == 0) {      
+            void * oldValue = psCurrentNode->pvValue;
+            psPreviousNode->next = psNextNode;
+            free(psCurrentNode);
             oSymTable->symTableSize -= 1;
             return oldValue;
         } /* THIS CHUNK CONTAINS SEGFAULT! */
+        psPreviousNode = psCurrentNode;
     }
     return NULL;
 }
