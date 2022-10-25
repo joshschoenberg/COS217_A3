@@ -92,7 +92,7 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
         if ((strcmp(psCurrentNode->pcKey, pcKey)) == 0) {
             oldValue = psCurrentNode->pvValue;
             psCurrentNode->pvValue = (void *) pvValue;
-            break;
+            return oldValue;
         }
     }
     return oldValue;
@@ -103,6 +103,7 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     struct SymTableNode *psNextNode;
 
     assert(oSymTable != NULL);
+    assert(pcKey != NULL);
     /* If Symbol table contains pcKey, return 1 */
 
     for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
@@ -117,9 +118,20 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
 }
 
 void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
+    struct SymTableNode *psCurrentNode;
+    struct SymTableNode *psNextNode;
+    
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
-    return (void*) pcKey;
+    for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
+                                           psCurrentNode = psNextNode) {
+        psNextNode = psCurrentNode->next;
+        if ((strcmp(psCurrentNode->pcKey, pcKey)) == 0) {
+            return psCurrentNode->pvValue;
+        }
+    }
+    /* If key is not in symbol table, return NULL. */
+    return NULL;
 }
 
 void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
