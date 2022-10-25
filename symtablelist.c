@@ -92,7 +92,7 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
         psNextNode = psCurrentNode->next;
         if ((strcmp(psCurrentNode->pcKey, pcKey)) == 0) {
             oldValue = psCurrentNode->pvValue;
-            psCurrentNode->pvValue = pvValue;
+            psCurrentNode->pvValue = (void *) pvValue;
             return oldValue;
         }
     }
