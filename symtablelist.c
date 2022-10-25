@@ -136,7 +136,31 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
 
 void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
    
-    
+    struct SymTableNode *psCurrentNode;
+    struct SymTableNode *psNextNode;
+    assert(oSymTable != NULL);
+    assert(pcKey != NULL);
+    /* If first node contains pcKey, remove first node and replace 
+    with second */
+    if (strcmp(oSymTable->psFirstNode->pcKey, pcKey) == 0) {
+        void * oldValue = psNextNode->pvValue;
+        psNextNode = oSymTable->psFirstNode->next;
+        free(oSymTable->psFirstNode);
+        oSymTable->psFirstNode = psNextNode;
+        return oldValue;
+        
+    }
+    /* If other node contains pcKey, remove that node */
+    for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
+                                           psCurrentNode = psNextNode) {
+        psNextNode = psCurrentNode->next;
+        if ((strcmp(psNextNode->pcKey, pcKey)) == 0) {      
+            void * oldValue = psNextNode->pvValue;
+            psCurrentNode->next = psNextNode->next;
+            free(psNextNode);
+            return oldValue;
+        }
+    }
     return NULL;
 }
 void SymTable_map(SymTable_T oSymTable,
