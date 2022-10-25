@@ -72,7 +72,7 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
         free(psNewNode);
         return 0;
     }
-    strcopy(pcKeyCopy, pcKey);
+    strcpy(pcKeyCopy, pcKey);
 
     /* Use that copy to put the key and value into the symbol table */
     psNewNode->pcKey = pcKeyCopy;
