@@ -51,6 +51,7 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
     
     struct SymTableNode *psNewNode;
 
+    char *pcKeyCopy;
     assert(oSymTable != NULL);
     /* Go through oSymTable to check if pcKey already exists */
     if (SymTable_contains(oSymTable, pcKey)) {
@@ -64,8 +65,17 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
     /* If insufficient mememory, return 0. */
     if (psNewNode == NULL)
         return 0;
-        
-    psNewNode->pcKey = pcKey;
+
+    /* Make copy of pcKey */
+    pcKeyCopy = malloc(strlen(pcKey) + 1);
+    if (pcKeyCopy == NULL) {
+        free(psNewNode);
+        return 0;
+    }
+    strcopy(pcKeyCopy, pcKey);
+
+    /* Use that copy to put the key and value into the symbol table */
+    psNewNode->pcKey = pcKeyCopy;
     psNewNode->pvValue = (void *) pvValue;
     psNewNode->next = oSymTable->psFirstNode;
     oSymTable->psFirstNode = psNewNode;
@@ -155,13 +165,13 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
                                            psCurrentNode = psNextNode) {
         psNextNode = psCurrentNode->next;
-        /* if ((strcmp(psNextNode->pcKey, pcKey)) == 0) {      
+        if ((strcmp(psNextNode->pcKey, pcKey)) == 0) {      
             void * oldValue = psNextNode->pvValue;
             psCurrentNode->next = psNextNode->next;
             free(psNextNode);
             oSymTable->symTableSize -= 1;
             return oldValue;
-        } */
+        } /* THIS CHUNK CONTAINS SEGFAULT! */
     }
     return NULL;
 }
