@@ -58,7 +58,7 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
     }
     
     /* If it does not, add it in and return 1. */
-        psNewNode = (struct SymTable*)calloc(1, sizeof(struct SymTable));
+        psNewNode = (struct SymTableNode*)calloc(1, sizeof(struct SymTableNode));
         
         /* If insufficient mememory, return 0. */
         if (psNewNode == NULL)
