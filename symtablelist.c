@@ -59,27 +59,43 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
     }
     
     /* If it does not, add it in and return 1. */
-        psNewNode = (struct SymTableNode*)calloc(1, sizeof(struct SymTableNode));
+    psNewNode = (struct SymTableNode*)calloc(1, sizeof(struct SymTableNode));
         
-        /* If insufficient mememory, return 0. */
-        if (psNewNode == NULL)
-            return 0;
+    /* If insufficient mememory, return 0. */
+    if (psNewNode == NULL)
+        return 0;
         
-        psNewNode->pcKey = pcKey;
-        psNewNode->next = oSymTable->psFirstNode;
-        oSymTable->psFirstNode = psNewNode;
+    psNewNode->pcKey = pcKey;
+    psNewNode->next = oSymTable->psFirstNode;
+    oSymTable->psFirstNode = psNewNode;
 
-        /* Update oSymTable size */
-        oSymTable->symTableSize += 1;
+    /* Update oSymTable size. */
+    oSymTable->symTableSize += 1;
+
     return 1;
 }
 
 void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
     const void *pvValue) {
-    assert(oSymTable != NULL);
-    return (void*) pcKey;
-    }
+    void *oldValue;
+    struct SymTableNode *psCurrentNode;
+    struct SymTableNode *psNextNode;
 
+    assert(oSymTable != NULL);
+
+    /* If oSymTable does not contain pcKey, return NULL. */
+    if (!SymTable_contains(oSymTable, pcKey))
+        return NULL;
+    /* Otherwise, find pcKey and replace its value with pvValue */
+    for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
+                                           psCurrentNode = psNextNode) {
+        psNextNode = psCurrentNode->next;
+        if ((strcmp(psCurrentNode->pcKey, pcKey)) == 0) 
+            oldValue = psCurrentNode->pvValue;
+            psCurrentNode->pvValue = pvValue;
+            return oldValue;
+    }
+}
 int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     struct SymTableNode *psCurrentNode;
     struct SymTableNode *psNextNode;
