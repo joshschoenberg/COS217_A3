@@ -155,13 +155,13 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
                                            psCurrentNode = psNextNode) {
         psNextNode = psCurrentNode->next;
-        if ((strcmp(psNextNode->pcKey, pcKey)) == 0) {      
+        /* if ((strcmp(psNextNode->pcKey, pcKey)) == 0) {      
             void * oldValue = psNextNode->pvValue;
             psCurrentNode->next = psNextNode->next;
             free(psNextNode);
             oSymTable->symTableSize -= 1;
             return oldValue;
-        }
+        } */
     }
     return NULL;
 }
