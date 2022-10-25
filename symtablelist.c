@@ -69,6 +69,8 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
         psNewNode->next = oSymTable->psFirstNode;
         oSymTable->psFirstNode = psNewNode;
 
+        /* Update oSymTable size */
+        oSymTable->symTableSize += 1;
     return 1;
 }
 
