@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "symtable.h"
+#include <string.h>
 
 struct SymTableNode {
     const char *pcKey; 
