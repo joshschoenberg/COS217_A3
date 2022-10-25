@@ -77,9 +77,9 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
 
 void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
     const void *pvValue) {
-    void *oldValue;
     struct SymTableNode *psCurrentNode;
     struct SymTableNode *psNextNode;
+    void *oldValue = NULL;
 
     assert(oSymTable != NULL);
 
@@ -93,10 +93,11 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
         if ((strcmp(psCurrentNode->pcKey, pcKey)) == 0) {
             oldValue = psCurrentNode->pvValue;
             psCurrentNode->pvValue = (void *) pvValue;
-            return oldValue;
         }
     }
+    return oldValue;
 }
+
 int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     struct SymTableNode *psCurrentNode;
     struct SymTableNode *psNextNode;
