@@ -59,31 +59,31 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
     /* If it does not, add it in and return 1. */
     
     /* If insufficient mememory, return 0. */
-
+    return 0;
 }
 
 void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
     const void *pvValue) {
     assert(oSymTable != NULL);
-
+    return (void*) pcKey;
     }
 
 int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
-
+    return 0;
 }
 
 void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
-
+    return (void*) pcKey;
 }
 
 void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
-
+    return (void*) pcKey;
 }
 
 void SymTable_map(SymTable_T oSymTable,
