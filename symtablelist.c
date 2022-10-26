@@ -62,16 +62,16 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
     }
     
     /* If it does not, add it in and return 1. */
-    /* psNewNode = (struct SymTableNode*)calloc(1, sizeof(struct SymTableNode)); */
+    psNewNode = (struct SymTableNode*)calloc(1, sizeof(struct SymTableNode)); 
 
-    psNewNode = (struct SymTableNode*)malloc(sizeof(struct SymTableNode)); 
+    /* REMOVE? psNewNode = (struct SymTableNode*)malloc(sizeof(struct SymTableNode)); */
 
     /* If insufficient mememory, return 0. */
     if (psNewNode == NULL)
         return 0;
 
     /* Make copy of pcKey NEW ADDITION! */
-    pcKeyCopy = (char *) malloc(strlen(pcKey) + 1);
+    pcKeyCopy = (const char *) malloc(strlen(pcKey) + 1);
     if (pcKeyCopy == NULL) {
         free(psNewNode);
         return 0;
