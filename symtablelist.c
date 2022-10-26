@@ -37,6 +37,7 @@ void SymTable_free(SymTable_T oSymTable) {
     for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
                                            psCurrentNode = psNextNode) {
         psNextNode = psCurrentNode->next;
+        /* free(psCurrentNode->pcKey); FREE THIS?? */
         free(psCurrentNode);
     }
 }
@@ -182,12 +183,18 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
 void SymTable_map(SymTable_T oSymTable,
     void (*pfApply)(const char *pcKey, void *pvValue, void *pvExtra),
     const void *pvExtra) {
-    
+
+    struct SymTableNode *psCurrentNode;
+    struct SymTableNode *psNextNode;
+
     assert(oSymTable != NULL);
 
-    
-
+    for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
+                                           psCurrentNode = psNextNode) {
+        psNextNode = psCurrentNode->next;
+        (*pfApply) (psCurrentNode->pcKey, psCurrentNode->pvValue, pvExtra);
     }
+}
 
 /* int  main (void) {
 
