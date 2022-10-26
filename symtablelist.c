@@ -153,6 +153,9 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     struct SymTableNode *psPreviousNode;
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
+    /* If symbol table is empty, return NULL */
+    if (oSymTable->psFirstNode == NULL) 
+        return NULL;
     /* If first node contains pcKey, remove first node and replace 
     with second */
     if (strcmp(oSymTable->psFirstNode->pcKey, pcKey) == 0) {
