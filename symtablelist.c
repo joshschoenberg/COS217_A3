@@ -37,7 +37,7 @@ void SymTable_free(SymTable_T oSymTable) {
     for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
                                            psCurrentNode = psNextNode) {
         psNextNode = psCurrentNode->next;
-        /* free(psCurrentNode->pcKey); FREE THIS?? */
+        free(psCurrentNode->pcKey); 
         free(psCurrentNode);
     }
 }
@@ -63,13 +63,15 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
     
     /* If it does not, add it in and return 1. */
     /* psNewNode = (struct SymTableNode*)calloc(1, sizeof(struct SymTableNode)); */
-    psNewNode = (struct SymTableNode*)malloc(sizeof(struct SymTableNode));
+
+    psNewNode = (struct SymTableNode*)malloc(sizeof(struct SymTableNode)); 
+
     /* If insufficient mememory, return 0. */
     if (psNewNode == NULL)
         return 0;
 
-    /* Make copy of pcKey */
-    pcKeyCopy = malloc(strlen(pcKey) + 1);
+    /* Make copy of pcKey NEW ADDITION! */
+    pcKeyCopy = (char *) malloc(strlen(pcKey) + 1);
     if (pcKeyCopy == NULL) {
         free(psNewNode);
         return 0;
@@ -161,6 +163,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     if (strcmp(oSymTable->psFirstNode->pcKey, pcKey) == 0) {
         void * oldValue = oSymTable->psFirstNode->pvValue;
         psNextNode = oSymTable->psFirstNode->next;
+        free(oSymTable->psFirstNode->pcKey);
         free(oSymTable->psFirstNode);
         oSymTable->psFirstNode = psNextNode;
         oSymTable->symTableSize -= 1;
@@ -175,6 +178,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
         if ((strcmp(psCurrentNode->pcKey, pcKey)) == 0) {      
             void * oldValue = psCurrentNode->pvValue;
             psPreviousNode->next = psNextNode;
+            free(psCurrentNode->pcKey);
             free(psCurrentNode);
             oSymTable->symTableSize -= 1;
             return oldValue;

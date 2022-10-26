@@ -7,7 +7,8 @@
 #include <assert.h>
 #include "symtable.h"
 
-enum { BUCKET_COUNT = 509 };
+static const size_t auBucketCounts[] = {509, 1021, 2039, 4093, 8191, 
+                                                   16381, 32749, 65521};
 
 struct Binding {
     const char *pcKey; 
@@ -15,20 +16,16 @@ struct Binding {
     struct Binding *next;
     };
 
-struct HashTable {
-    struct Binding *buckets[BUCKET_COUNT];
-};
-
 struct SymTable {
-    struct HashTable *psFirst;
     size_t bindingsCount;
     size_t uBucketCount;
+    struct Binding **buckets[];
     };
 
 /* Return a hash code for pcKey that is between 0 and uBucketCount-1,
    inclusive. */
 
-/* static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
+static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
 {
    const size_t HASH_MULTIPLIER = 65599;
    size_t u;
@@ -40,7 +37,7 @@ struct SymTable {
       uHash = uHash * HASH_MULTIPLIER + (size_t)pcKey[u];
 
    return uHash % uBucketCount;
-} */
+} 
 
 SymTable_T SymTable_new(void) {
     SymTable_T oSymTable;
@@ -48,27 +45,51 @@ SymTable_T SymTable_new(void) {
     if(oSymTable == NULL) {
         return NULL;
         }
-    oSymTable->psFirst = (struct HashTable *) calloc(1, sizeof(struct HashTable));
-    if (oSymTable->psFirst == NULL) {
+    /* HOW CAN WE GENERALIZE auBucketCounts to create a new hash table of any size?? */
+    oSymTable->buckets = (Binding **) calloc(auBucketCounts[0] , sizeof(Binding *)) ;
+    if (oSymTable->psFirstBucket == NULL) {
         free(oSymTable);
         return NULL;
     }
     oSymTable->bindingsCount = 0;
-    oSymTable->uBucketCount = BUCKET_COUNT;
+    oSymTable->uBucketCount = auBucketCounts[0];
     
     return oSymTable;
 }
 
 void SymTable_free(SymTable_T oSymTable) {
+    size_t bucketCountIndex;
+    struct Binding *psCurrentBinding;
+    struct Binding *psNextBinding;
 
+    assert(oSymTable != NULL);
+    bucketCountIndex = 0;
+    /* Go through every BUCKET */
+    while (bucketCountIndex < oSymTable->uBucketCount) {
+        /* Go through every node within each bucket, freeing each one */
+        for (psCurrentBinding = oSymTable->psFirstBucket->buckets[bucketCountIndex]; psCurrentBinding != NULL; 
+                                           psCurrentBinding = psNextBinding) {
+        psNextBinding = psCurrentBinding->next;
+        free(psCurrentBinding->pcKey); 
+        free(psCurrentBinding);
+    }
+    bucketCountIndex++;
+    }
+    /* Free the array of buckets */
+    free(oSymTable->psFirstBucket->buckets);
+    /* Free the SymTable */
+    free(oSymTable->psFirstBucket);
 }
 
 size_t SymTable_getLength(SymTable_T oSymTable) {
-    return 0;
+    assert(oSymTable != NULL);
+    return oSymTable->bindingsCount;
 }
 
 int SymTable_put(SymTable_T oSymTable, const char *pcKey, 
                                                   const void *pvValue) {
+
+
     return 0;
 }
 
@@ -94,3 +115,5 @@ void SymTable_map(SymTable_T oSymTable,
     const void *pvExtra){
         
     }
+
+/* RESIZE HASHTABLE! */

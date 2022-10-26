@@ -6,7 +6,6 @@
 #define SYMTABLE_INCLUDED
 #include <stddef.h>
 
-
 /* A SymTable_T object is an unordered collection of bindings,
 containing a key and value pair. */
 typedef struct SymTable *SymTable_T;
