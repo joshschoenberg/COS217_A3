@@ -28,7 +28,7 @@ struct SymTable {
 /* Return a hash code for pcKey that is between 0 and uBucketCount-1,
    inclusive. */
 
-static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
+/* static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
 {
    const size_t HASH_MULTIPLIER = 65599;
    size_t u;
@@ -40,7 +40,7 @@ static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
       uHash = uHash * HASH_MULTIPLIER + (size_t)pcKey[u];
 
    return uHash % uBucketCount;
-}
+} */
 
 SymTable_T SymTable_new(void) {
     SymTable_T oSymTable;
@@ -64,29 +64,29 @@ void SymTable_free(SymTable_T oSymTable) {
 }
 
 size_t SymTable_getLength(SymTable_T oSymTable) {
-
+    return 0;
 }
 
 int SymTable_put(SymTable_T oSymTable, const char *pcKey, 
                                                   const void *pvValue) {
-
+    return 0;
 }
 
 void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
     const void *pvValue) {
-
+return (void *) pcKey;
     }
 
 int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
-
+    return 0;
 }
 
 void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
-
+    return (void *) pcKey;
 }
 
 void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
-
+    return (void *) pcKey;
 }
 
 void SymTable_map(SymTable_T oSymTable,
