@@ -51,8 +51,8 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
                                                   const void *pvValue) {
     
     struct SymTableNode *psNewNode;
-
     char *pcKeyCopy;
+    
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
     /* Go through oSymTable to check if pcKey already exists */

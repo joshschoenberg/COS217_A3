@@ -10,16 +10,16 @@
 static const size_t auBucketCounts[] = {509, 1021, 2039, 4093, 8191, 
                                                    16381, 32749, 65521};
 
-struct Binding {
+struct SymTableBinding {
     const char *pcKey; 
     void *pvValue; 
-    struct Binding *next;
+    struct SymTableBinding *next;
     };
 
 struct SymTable {
     size_t bindingsCount;
     size_t uBucketCount;
-    struct Binding **buckets;
+    struct SymTableBinding **buckets;
     };
 
 /* Return a hash code for pcKey that is between 0 and uBucketCount-1,
@@ -46,7 +46,7 @@ SymTable_T SymTable_new(void) {
         return NULL;
         }
     /* HOW CAN WE GENERALIZE auBucketCounts to create a new hash table of any size?? */
-    oSymTable->buckets = (struct Binding**) calloc(auBucketCounts[0] , sizeof(struct Binding *)) ;
+    oSymTable->buckets = (struct SymTableBinding**) calloc(auBucketCounts[0] , sizeof(struct SymTableBinding *)) ;
     if (oSymTable->buckets == NULL) {
         free(oSymTable);
         return NULL;
@@ -59,8 +59,8 @@ SymTable_T SymTable_new(void) {
 
 void SymTable_free(SymTable_T oSymTable) {
     size_t bucketCountIndex;
-    struct Binding *psCurrentBinding;
-    struct Binding *psNextBinding;
+    struct SymTableBinding *psCurrentBinding;
+    struct SymTableBinding *psNextBinding;
 
     assert(oSymTable != NULL);
     bucketCountIndex = 0;
@@ -88,8 +88,19 @@ size_t SymTable_getLength(SymTable_T oSymTable) {
 
 int SymTable_put(SymTable_T oSymTable, const char *pcKey, 
                                                   const void *pvValue) {
-                                                    
-
+    size_t uBucketIndex;
+    struct SymTableBinding *psNewBinding;
+    char *pcKeyCopy;
+    
+    assert(oSymTable != NULL);
+    assert(pcKey != NULL);
+    /* Go through oSymTable to check if pcKey already exists */
+    if (SymTable_contains(oSymTable, pcKey)) {
+        /* If it does, return 0. */
+        return 0;
+    }                                                
+    uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount)
+    
     return 0;
 }
 
@@ -99,6 +110,21 @@ return (void *) pcKey;
     }
 
 int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
+    size_t uBucketsIndex;
+    struct SymTableBinding *psCurrentBinding;
+    struct SymTableBinding *psNextBinding;
+
+    assert(oSymTable != NULL);
+    assert(pcKey != NULL);
+    /* If Symbol table contains pcKey, return 1. */
+    uBucketsIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
+    for (psCurrentBinding = oSymTable->buckets[uBucketsIndex]; psCurrentBinding != NULL; 
+                                           psCurrentBinding = psNextBinding) {
+        psNextBinding = psCurrentBinding->next;
+        if ((strcmp(psCurrentBinding->pcKey, pcKey)) == 0) 
+            return 1;
+}
+    /* If table does not contain pcKey, return 0 */
     return 0;
 }
 
