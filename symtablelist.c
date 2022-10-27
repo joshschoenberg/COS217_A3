@@ -37,7 +37,7 @@ void SymTable_free(SymTable_T oSymTable) {
     for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
                                            psCurrentNode = psNextNode) {
         psNextNode = psCurrentNode->next;
-        free(psCurrentNode->pcKey); 
+        free((char *) psCurrentNode->pcKey); 
         free(psCurrentNode);
     }
 }
@@ -71,7 +71,7 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
         return 0;
 
     /* Make copy of pcKey NEW ADDITION! */
-    pcKeyCopy = (const char *) malloc(strlen(pcKey) + 1);
+    pcKeyCopy = (char *) malloc(strlen(pcKey) + 1);
     if (pcKeyCopy == NULL) {
         free(psNewNode);
         return 0;
@@ -163,7 +163,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     if (strcmp(oSymTable->psFirstNode->pcKey, pcKey) == 0) {
         void * oldValue = oSymTable->psFirstNode->pvValue;
         psNextNode = oSymTable->psFirstNode->next;
-        free(oSymTable->psFirstNode->pcKey);
+        free((char *) oSymTable->psFirstNode->pcKey);
         free(oSymTable->psFirstNode);
         oSymTable->psFirstNode = psNextNode;
         oSymTable->symTableSize -= 1;
@@ -177,12 +177,14 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
         psNextNode = psCurrentNode->next;
         if ((strcmp(psCurrentNode->pcKey, pcKey)) == 0) {      
             void * oldValue = psCurrentNode->pvValue;
+            /* Set the previous node's next to be the removed node's 
+                                                                 next */
             psPreviousNode->next = psNextNode;
-            free(psCurrentNode->pcKey);
+            free((char *) psCurrentNode->pcKey);
             free(psCurrentNode);
             oSymTable->symTableSize -= 1;
             return oldValue;
-        } /* THIS CHUNK CONTAINS SEGFAULT! */
+        } 
         psPreviousNode = psCurrentNode;
     }
     return NULL;
