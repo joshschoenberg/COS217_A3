@@ -79,7 +79,7 @@ But, the bindings are in the correct bucket */
     /* Go through each bucket, and determine what the new bucket is */
     oldSymTableBucketIndex = 0;
     while( oldSymTableBucketIndex < oSymTable->uBucketCount) {
-        newSymTableBucketIndex = SymTable_hash(pcKey, newUBucketCount);
+        newSymTableBucketIndex = SymTable_hash(oSymTable->buckets[oldSymTableBucketIndex]->pcKey, newUBucketCount);
         newBuckets[newSymTableBucketIndex] = oSymTable->buckets[oldSymTableBucketIndex];
         oldSymTableBucketIndex++;
     }
