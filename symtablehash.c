@@ -195,7 +195,47 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
 }
 
 void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
-    return (void *) pcKey;
+    struct SymTableBinding *psCurrentBinding;
+    struct SymTableBinding *psNextBinding;
+    struct SymTableBinding *psPreviousBinding;
+    size_t uBucketIndex;
+
+    assert(oSymTable != NULL);
+    assert(pcKey != NULL);
+    /* If symbol table is empty, return NULL */
+    if (oSymTable->buckets == NULL) 
+        return NULL;
+    /* If first binding contains pcKey, remove first node and replace 
+    with second */
+    uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
+    if (strcmp(oSymTable->buckets[uBucketIndex], pcKey) == 0) {
+        void * oldValue = oSymTable->buckets[uBucketIndex]->pvValue;
+        psNextBinding = oSymTable->buckets[uBucketIndex]->next;
+        free((char *) oSymTable->buckets[uBucketIndex]->pcKey);
+        free(oSymTable->buckets[uBucketIndex]);
+        oSymTable->buckets[uBucketIndex] = psNextBinding;
+        oSymTable->bindingsCount -= 1;
+        return oldValue;
+    }
+    /* If other binding contains pcKey, remove that binding */
+    psPrevious = NULL;
+    for (psCurrentBinding = oSymTable->buckets[uBucketIndex]; psCurrentBinding != NULL; 
+                                           psCurrentBinding = psNextBinding) {
+        psNextBinding = psCurrentBinding->next;
+        if ((strcmp(psCurrentBinding->pcKey, pcKey)) == 0) {      
+            void * oldValue = psCurrentBinding->pvValue;
+            /* Set the previous node's next to be the removed node's 
+                                                                 next */
+            psPreviousBinding->next = psNextBinding;
+            free((char *) psCurrentBinding->pcKey);
+            free(psCurrentBinding);
+            oSymTable->bindingsCount -= 1;
+            return oldValue;
+        } 
+        psPreviousNode = psCurrentNode;
+    }
+    /* If pcKey does not apear in Symbol Table, return NULL. */
+    return NULL;
 }
 
 void SymTable_map(SymTable_T oSymTable,
