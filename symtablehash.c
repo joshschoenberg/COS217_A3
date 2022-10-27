@@ -67,7 +67,7 @@ void SymTable_free(SymTable_T oSymTable) {
     bucketCountIndex = 0;
     /* Go through every BUCKET */
     while (bucketCountIndex < oSymTable->uBucketCount) {
-        /* Go through every node within each bucket, freeing each one */
+        /* Go through every binding within each bucket, freeing each one */
         for (psCurrentBinding = oSymTable->buckets[bucketCountIndex]; psCurrentBinding != NULL; 
                                            psCurrentBinding = psNextBinding) {
         psNextBinding = psCurrentBinding->next;
@@ -103,8 +103,30 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
     }
     /* Put key and value in correct bucket */                                                
     uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
-    
-    return 0;
+
+    psNewBinding = (struct SymTableBinding*)calloc(1, sizeof(struct SymTableBinding)); 
+    /* If insufficient mememory, return 0. */
+    if (psNewBinding == NULL)
+        return 0;
+
+    /* Make copy of pcKey NEW ADDITION! */
+    pcKeyCopy = (char *) malloc(strlen(pcKey) + 1);
+    if (pcKeyCopy == NULL) {
+        free(psNewBinding);
+        return 0;
+    }
+    strcpy(pcKeyCopy, pcKey);
+
+    /* Use that copy to put the key and value into the symbol table */
+    psNewBinding->pcKey = pcKeyCopy;
+    psNewBinding->pvValue = (void *) pvValue;
+    /* IS THIS CORRECT?? */
+    psNewBinding->next = oSymTable->buckets[uBucketIndex];
+    oSymTable->buckets[uBucketIndex] = psNewBinding;
+
+    /* Update oSymTable size. */
+    oSymTable->bindingsCount += 1;
+    return 1;
 }
 
 void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
