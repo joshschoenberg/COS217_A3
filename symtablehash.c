@@ -287,7 +287,7 @@ static void SymTable_expand(SymTable_T oSymTable) {
     while (auBucketCountsIndex < numBucketCounts) {
         /* If it's the last one, return the original SymTable */
         if (auBucketCountsIndex == numBucketCountIndex - 1)
-            return oSymTable;
+            return;
         /* Set the newBucketCountIndex to be the next one */
         if (auBucketCounts[auBucketCountsIndex] == oSymTable->uBucketCount) {
             newBucketCountIndex = auBucketCounts[auBucketCountsIndex + 1];
@@ -301,7 +301,7 @@ new size. The SymTable is still the same, though, and the set of bindings are th
 But, the bindings are in the correct bucket */
     newBuckets = (struct SymTableBinding **) calloc(newUBucketCount, sizeof(struct SymTableBinding *));
     if(newBuckets == NULL) {
-        return oSymTable;
+        return;
         }
         
     /* Add in all of the buckets to new the correct spot */
@@ -317,5 +317,5 @@ But, the bindings are in the correct bucket */
     /* Set oSymTable's buckets be the new hashtable */
     oSymTable->buckets = newBuckets;
     oSymTable->uBucketCount = newUBucketCount;
-    return oSymTable;
+    return;
 }
