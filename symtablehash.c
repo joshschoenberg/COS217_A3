@@ -154,7 +154,24 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
 }
 
 void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
-    return (void *) pcKey;
+    struct SymTableBinding *psCurrentBinding;
+    struct SymTableBinding *psNextBinding;
+    size_t uBucketIndex;
+
+    assert(oSymTable != NULL);
+    assert(pcKey != NULL);
+
+    /* Search appropriate bucket for the binding */
+    uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
+    for (psCurrentBinding = oSymTable->buckets[uBucketIndex]; psCurrentBinding != NULL; 
+                                           psCurrentBinding = psNextBinding) {
+        psNextBinding = psCurrentBinding->next;
+        if ((strcmp(psCurrentBinding->pcKey, pcKey)) == 0) {
+            return psCurrentBinding->pvValue;
+        }
+    }
+    /* If key is not in symbol table, return NULL. */
+    return NULL;
 }
 
 void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
