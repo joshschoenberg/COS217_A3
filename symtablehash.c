@@ -205,9 +205,12 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     /* If symbol table is empty, return NULL */
     if (oSymTable->buckets == NULL) 
         return NULL;
+    /* If bucket is emty, return NULL */
+    uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
+    if (oSymTable->buckets[uBucketIndex] == NULL)
+        return NULL;
     /* If first binding contains pcKey, remove first binding and replace 
     with second */
-    uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
     if (strcmp(oSymTable->buckets[uBucketIndex]->pcKey, pcKey) == 0) {
         void * oldValue = oSymTable->buckets[uBucketIndex]->pvValue;
         psNextBinding = oSymTable->buckets[uBucketIndex]->next;
