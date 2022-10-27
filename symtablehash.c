@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "symtable.h"
+#include <string.h>
 
 static const size_t auBucketCounts[] = {509, 1021, 2039, 4093, 8191, 
                                                    16381, 32749, 65521};
@@ -94,12 +95,14 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
     
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
+
     /* Go through oSymTable to check if pcKey already exists */
     if (SymTable_contains(oSymTable, pcKey)) {
         /* If it does, return 0. */
         return 0;
-    }                                                
-    uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount)
+    }
+    /* Put key and value in correct bucket */                                                
+    uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
     
     return 0;
 }
