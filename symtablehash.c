@@ -247,6 +247,7 @@ void SymTable_map(SymTable_T oSymTable,
 
     struct SymTableBinding *psCurrentBinding;
     struct SymTableBinding *psNextBinding;
+    size_t bucketCountIndex;
 
     assert(oSymTable != NULL);
 
@@ -262,7 +263,6 @@ void SymTable_map(SymTable_T oSymTable,
     }
 }
 /* RESIZE HASHTABLE! */
-size_t SymTable_expansion() {
-    /* Determine what the index of the buckets should be and return that.
+    /* Determine size_t SymTable_expansion () {  what the index of the buckets should be and return that.
         Then, use that index as the index to create a new hash table. */
-    }
+    
