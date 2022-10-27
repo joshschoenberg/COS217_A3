@@ -208,7 +208,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     /* If first binding contains pcKey, remove first binding and replace 
     with second */
     uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
-    if (strcmp(oSymTable->buckets[uBucketIndex], pcKey) == 0) {
+    if (strcmp(oSymTable->buckets[uBucketIndex]->pcKey, pcKey) == 0) {
         void * oldValue = oSymTable->buckets[uBucketIndex]->pvValue;
         psNextBinding = oSymTable->buckets[uBucketIndex]->next;
         free((char *) oSymTable->buckets[uBucketIndex]->pcKey);
@@ -218,7 +218,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
         return oldValue;
     }
     /* If other binding contains pcKey, remove that binding */
-    psPrevious = NULL;
+    psPreviousBinding = NULL;
     for (psCurrentBinding = oSymTable->buckets[uBucketIndex]; psCurrentBinding != NULL; 
                                            psCurrentBinding = psNextBinding) {
         psNextBinding = psCurrentBinding->next;
