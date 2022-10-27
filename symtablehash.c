@@ -69,7 +69,7 @@ static void SymTable_expand(SymTable_T oSymTable) {
 /* Create a new hash table, which is a copy of the old one, but with a 
 new size. The SymTable is still the same, though, and the set of bindings are the same.
 But, the bindings are in the correct bucket */
-    newBuckets = (struct SymTableBinding **) calloc(newUBucketCount, sizeof(struct SymTableBinding *));
+    newBuckets = (struct SymTableBinding **) calloc(newBucketCount, sizeof(struct SymTableBinding *));
     if(newBuckets == NULL) {
         return;
         }
@@ -83,7 +83,7 @@ But, the bindings are in the correct bucket */
             oldSymTableBucketIndex++;
             continue;
         }
-        newSymTableBucketIndex = SymTable_hash(oSymTable->buckets[oldSymTableBucketIndex]->pcKey, newUBucketCount);
+        newSymTableBucketIndex = SymTable_hash(oSymTable->buckets[oldSymTableBucketIndex]->pcKey, newBucketCount);
         newBuckets[newSymTableBucketIndex] = oSymTable->buckets[oldSymTableBucketIndex];
         oldSymTableBucketIndex++;
     }
