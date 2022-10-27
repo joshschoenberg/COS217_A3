@@ -132,8 +132,8 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
     oSymTable->bindingsCount += 1;
 
     /* Expand the number of buckets, if necessary. */
-    if ((oSymTable->bindingsCount) > oSymTable->buckets) {
-        oSymTable = SymTable_expand(oSymTable);
+    if ((oSymTable->bindingsCount) > oSymTable->uBucketCount) {
+        SymTable_expand(oSymTable);
     }
     return 1;
 }
@@ -276,7 +276,7 @@ void SymTable_map(SymTable_T oSymTable,
     /* Determine size_t SymTable_expansion () {  what the index of the buckets should be and return that.
         Then, use that index as the index to create a new hash table. */
 
-SymTable_T SymTable_expand(SymTable_T oSymTable) {
+static void SymTable_expand(SymTable_T oSymTable) {
     struct SymTableBinding **newBuckets;
     size_t auBucketCountsIndex;
     size_t oldSymTableBucketIndex;
