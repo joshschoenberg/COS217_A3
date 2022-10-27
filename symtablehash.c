@@ -205,7 +205,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     /* If symbol table is empty, return NULL */
     if (oSymTable->buckets == NULL) 
         return NULL;
-    /* If first binding contains pcKey, remove first node and replace 
+    /* If first binding contains pcKey, remove first binding and replace 
     with second */
     uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
     if (strcmp(oSymTable->buckets[uBucketIndex], pcKey) == 0) {
@@ -224,15 +224,15 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
         psNextBinding = psCurrentBinding->next;
         if ((strcmp(psCurrentBinding->pcKey, pcKey)) == 0) {      
             void * oldValue = psCurrentBinding->pvValue;
-            /* Set the previous node's next to be the removed node's 
-                                                                 next */
+            /* Set the previous binding's next to be the removed 
+                                                       binding's next */
             psPreviousBinding->next = psNextBinding;
             free((char *) psCurrentBinding->pcKey);
             free(psCurrentBinding);
             oSymTable->bindingsCount -= 1;
             return oldValue;
         } 
-        psPreviousNode = psCurrentNode;
+        psPreviousBinding = psCurrentBinding;
     }
     /* If pcKey does not apear in Symbol Table, return NULL. */
     return NULL;
