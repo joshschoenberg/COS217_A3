@@ -49,24 +49,23 @@ static void SymTable_expand(SymTable_T oSymTable) {
     struct SymTableBinding **newBuckets;
     size_t auBucketCountsIndex;
     size_t oldSymTableBucketIndex;
-    size_t newBucketCountIndex;
-    size_t newUBucketCount;
+    /* size_t newBucketCountIndex; */
+    size_t newBucketCount;
     size_t newSymTableBucketIndex;
     /* Defines the number of bucket counts */
     size_t numBucketCounts = sizeof(auBucketCounts)/sizeof(auBucketCounts[0]);
     auBucketCountsIndex = 0;
     while (auBucketCountsIndex < numBucketCounts) {
-        /* If it's the last one, return the original SymTable */
+        /* If it's the last one, do not change the sym table */
         if (auBucketCountsIndex == numBucketCounts - 1)
             return;
-        /* Set the newBucketCountIndex to be the next one */
+        /* Set the newBucketCount to be the next one */
         if (auBucketCounts[auBucketCountsIndex] == oSymTable->uBucketCount) {
-            newBucketCountIndex = auBucketCounts[auBucketCountsIndex + 1];
+            newBucketCount = auBucketCounts[auBucketCountsIndex + 1];
             break;
         }
         auBucketCountsIndex++;
     }
-    newUBucketCount = auBucketCounts[newBucketCountIndex];
 /* Create a new hash table, which is a copy of the old one, but with a 
 new size. The SymTable is still the same, though, and the set of bindings are the same.
 But, the bindings are in the correct bucket */
@@ -92,7 +91,7 @@ But, the bindings are in the correct bucket */
     free(oSymTable->buckets);
     /* Set oSymTable's buckets be the new hashtable */
     oSymTable->buckets = newBuckets;
-    oSymTable->uBucketCount = newUBucketCount;
+    oSymTable->uBucketCount = newBucketCount;
     return;
 }
 
