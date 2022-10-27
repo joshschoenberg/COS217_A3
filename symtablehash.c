@@ -131,7 +131,27 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
 
 void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
     const void *pvValue) {
-return (void *) pcKey;
+    
+    struct SymTableBinding *psCurrentBinding;
+    struct SymTableBinding *psNextBinding;
+    size_t uBucketIndex;
+
+    assert(oSymTable != NULL);
+
+    /* Find pcKey and replace its value with pvValue */
+    uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
+    for (psCurrentBinding = oSymTable->buckets[uBucketIndex]; psCurrentBinding != NULL; 
+                                           psCurrentBinding = psNextBinding) {
+        psNextNode = psCurrentBinding->next;
+        if ((strcmp(psCurrentBinding->pcKey, pcKey)) == 0) {
+            void *oldValue = psCurrentBinding->pvValue;
+            psCurrentBinding->pvValue = (void *) pvValue;
+            return oldValue;
+        }
+    }
+    /* If oSymTable does not contain pcKey, return NULL. */
+    return NULL;
+
     }
 
 int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
