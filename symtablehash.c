@@ -260,6 +260,7 @@ void SymTable_map(SymTable_T oSymTable,
         psNextBinding = psCurrentBinding->next;
         (*pfApply) (psCurrentBinding->pcKey, psCurrentBinding->pvValue, (void *) pvExtra);
         }
+        bucketCountIndex++;
     }
 }
 /* RESIZE HASHTABLE! */
