@@ -8,8 +8,11 @@
 #include "symtable.h"
 #include <string.h>
 
+/* Array of different bucket counts */
 static const size_t auBucketCounts[] = {509, 1021, 2039, 4093, 8191, 
                                                    16381, 32749, 65521};
+/* Constant defining the number of bucket counts */
+static const size_t numBucketCounts = sizeof(auBucketCounts)/sizeof(auBucketCounts[0]);
 
 struct SymTableBinding {
     const char *pcKey; 
@@ -101,6 +104,7 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
         /* If it does, return 0. */
         return 0;
     }
+
     /* Put key and value in correct bucket */                                                
     uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
 
@@ -126,6 +130,11 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
 
     /* Update oSymTable size. */
     oSymTable->bindingsCount += 1;
+
+    /* Expand the number of buckets, if necessary. */
+    if ((oSymTable->bindingsCount) > oSymTable->buckets) {
+        oSymTable = SymTable_expand(oSymTable);
+    }
     return 1;
 }
 
@@ -266,4 +275,47 @@ void SymTable_map(SymTable_T oSymTable,
 /* RESIZE HASHTABLE! */
     /* Determine size_t SymTable_expansion () {  what the index of the buckets should be and return that.
         Then, use that index as the index to create a new hash table. */
-    
+
+SymTable_T SymTable_expand(SymTable_T oSymTable) {
+    struct SymTableBinding **newBuckets;
+    size_t auBucketCountsIndex;
+    size_t oldSymTableBucketIndex;
+    size_t newBucketCountIndex;
+    size_t newUBucketCount;
+    size_t newSymTableBucketIndex;
+    auBucketCountsIndex = 0;
+    while (auBucketCountsIndex < numBucketCounts) {
+        /* If it's the last one, return the original SymTable */
+        if (auBucketCountsIndex == numBucketCountIndex - 1)
+            return oSymTable;
+        /* Set the newBucketCountIndex to be the next one */
+        if (auBucketCounts[auBucketCountsIndex] == oSymTable->uBucketCount) {
+            newBucketCountIndex = auBucketCounts[auBucketCountsIndex + 1];
+            break;
+        }
+        auBucketCountsIndex++;
+    }
+    newUBucketCount = auBucketCounts[newBucketCountIndex];
+/* Create a new hash table, which is a copy of the old one, but with a 
+new size. The SymTable is still the same, though, and the set of bindings are the same.
+But, the bindings are in the correct bucket */
+    newBuckets = (struct SymTableBinding **) calloc(newUBucketCount, sizeof(struct SymTableBinding *));
+    if(newBuckets == NULL) {
+        return oSymTable;
+        }
+        
+    /* Add in all of the buckets to new the correct spot */
+    /* Go through each bucket, and determine what the new bucket is */
+    oldSymTableBucketIndex = 0;
+    while( oldSymTableBucketIndex < oSymTable->uBucketCount) {
+        newSymTableBucketIndex = SymTable_hash(pcKey, newUBucketCount);
+        newBuckets[newSymTableBucketIndex] = oSymTable->buckets[oldSymTableBucketIndex];
+        oldSymTableBucketIndex++;
+    }
+    /* Free the old hash table's buckets */ 
+    free(oSymTable->buckets);
+    /* Set oSymTable's buckets be the new hashtable */
+    oSymTable->buckets = newBuckets;
+    oSymTable->uBucketCount = newUBucketCount;
+    return oSymTable;
+}

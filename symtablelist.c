@@ -52,7 +52,7 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
     
     struct SymTableNode *psNewNode;
     char *pcKeyCopy;
-    
+
     assert(oSymTable != NULL);
     assert(pcKey != NULL);
     /* Go through oSymTable to check if pcKey already exists */
@@ -98,8 +98,7 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
 
     assert(oSymTable != NULL);
 
-    /* If oSymTable does not contain pcKey, return NULL.
-    Otherwise, find pcKey and replace its value with pvValue */
+    /* Find pcKey and replace its value with pvValue */
     for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
                                            psCurrentNode = psNextNode) {
         psNextNode = psCurrentNode->next;
@@ -109,6 +108,8 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
             return oldValue;
         }
     }
+        
+    /* If oSymTable does not contain pcKey, return NULL. */
     return NULL;
 }
 
@@ -187,6 +188,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
         } 
         psPreviousNode = psCurrentNode;
     }
+    /* If pcKey does not apear in Symbol Table, return NULL. */
     return NULL;
 }
 void SymTable_map(SymTable_T oSymTable,
