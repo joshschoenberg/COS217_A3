@@ -11,8 +11,6 @@
 /* Array of different bucket counts */
 static const size_t auBucketCounts[] = {509, 1021, 2039, 4093, 8191, 
                                                    16381, 32749, 65521};
-/* Constant defining the number of bucket counts */
-static const size_t numBucketCounts = sizeof(auBucketCounts)/sizeof(auBucketCounts[0]);
 
 struct SymTableBinding {
     const char *pcKey; 
@@ -54,10 +52,12 @@ static void SymTable_expand(SymTable_T oSymTable) {
     size_t newBucketCountIndex;
     size_t newUBucketCount;
     size_t newSymTableBucketIndex;
+    /* Defines the number of bucket counts */
+    size_t numBucketCounts = sizeof(auBucketCounts)/sizeof(auBucketCounts[0]);
     auBucketCountsIndex = 0;
     while (auBucketCountsIndex < numBucketCounts) {
         /* If it's the last one, return the original SymTable */
-        if (auBucketCountsIndex == numBucketCountIndex - 1)
+        if (auBucketCountsIndex == numBucketCounts - 1)
             return;
         /* Set the newBucketCountIndex to be the next one */
         if (auBucketCounts[auBucketCountsIndex] == oSymTable->uBucketCount) {
