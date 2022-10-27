@@ -244,7 +244,25 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
 void SymTable_map(SymTable_T oSymTable,
     void (*pfApply)(const char *pcKey, void *pvValue, void *pvExtra),
     const void *pvExtra){
-        
-    }
 
+    struct SymTableBinding *psCurrentBinding;
+    struct SymTableBinding *psNextBinding;
+
+    assert(oSymTable != NULL);
+
+    bucketCountIndex = 0;
+    /* Go through every bucket */
+    while (bucketCountIndex < oSymTable->uBucketCount) {
+        /* Go through every binding within each bucket, applying pfApply to each one */
+        for (psCurrentBinding = oSymTable->buckets[bucketCountIndex]; psCurrentBinding != NULL; 
+                                           psCurrentBinding = psNextBinding) {
+        psNextBinding = psCurrentBinding->next;
+        (*pfApply) (psCurrentBinding->pcKey, psCurrentBinding->pvValue, (void *) pvExtra);
+        }
+    }
+}
 /* RESIZE HASHTABLE! */
+size_t SymTable_expansion() {
+    /* Determine what the index of the buckets should be and return that.
+        Then, use that index as the index to create a new hash table. */
+    }
