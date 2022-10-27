@@ -142,7 +142,7 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
     uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
     for (psCurrentBinding = oSymTable->buckets[uBucketIndex]; psCurrentBinding != NULL; 
                                            psCurrentBinding = psNextBinding) {
-        psNextNode = psCurrentBinding->next;
+        psNextBinding = psCurrentBinding->next;
         if ((strcmp(psCurrentBinding->pcKey, pcKey)) == 0) {
             void *oldValue = psCurrentBinding->pvValue;
             psCurrentBinding->pvValue = (void *) pvValue;
