@@ -45,7 +45,7 @@ static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
     /* Determine size_t SymTable_expansion () {  what the index of the buckets should be and return that.
         Then, use that index as the index to create a new hash table. */
 
-static SymTable_T SymTable_expand(SymTable_T oSymTable) {
+static void SymTable_expand(SymTable_T oSymTable) {
     struct SymTableBinding **newBuckets;
     size_t auBucketCountsIndex;
     size_t oldSymTableBucketIndex;
@@ -58,7 +58,7 @@ static SymTable_T SymTable_expand(SymTable_T oSymTable) {
     while (auBucketCountsIndex < numBucketCounts) {
         /* If it's the last one, do not change the sym table */
         if (auBucketCountsIndex == numBucketCounts - 1)
-            return oSymTable;
+            return;
         /* Set the newBucketCount to be the next one */
         if (auBucketCounts[auBucketCountsIndex] == oSymTable->uBucketCount) {
             newBucketCount = auBucketCounts[auBucketCountsIndex + 1];
@@ -71,7 +71,7 @@ new size. The SymTable is still the same, though, and the set of bindings are th
 But, the bindings are in the correct bucket */
     newBuckets = (struct SymTableBinding **) calloc(newBucketCount, sizeof(struct SymTableBinding *));
     if(newBuckets == NULL) {
-        return oSymTable;
+        return;
         }
         
     /* Add in all of the buckets to new the correct spot */
@@ -90,9 +90,9 @@ But, the bindings are in the correct bucket */
     /* Free the old hash table's buckets */ 
     free(oSymTable->buckets);
     /* Set oSymTable's buckets be the new hashtable */
-    oSymTable->buckets = newBuckets;
+    oSymTable->buckets = newBuckets[0];
     oSymTable->uBucketCount = newBucketCount;
-    return oSymTable;
+    return;
 }
 
 SymTable_T SymTable_new(void) {
@@ -185,7 +185,7 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
 
     /* Expand the number of buckets, if necessary. */
     if ((oSymTable->bindingsCount) > (oSymTable->uBucketCount)) {
-        oSymTable = SymTable_expand(oSymTable);
+        SymTable_expand(oSymTable);
     } 
     return 1;
 }
