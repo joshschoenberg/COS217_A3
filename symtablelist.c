@@ -8,11 +8,18 @@
 #include "symtable.h"
 #include <string.h>
 
+/* Each key and value is stored in a SymTableNode. SymTableNodes are 
+linked to form a list. */
 struct SymTableNode {
+    /* The key */
     const char *pcKey; 
+    /* The value */
     void *pvValue; 
+    /* The address of the next SymTableNode */
     struct SymTableNode *next;
     };
+
+
 struct SymTable {
     struct SymTableNode *psFirstNode;
     size_t symTableSize;
@@ -98,6 +105,7 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
     struct SymTableNode *psNextNode;
 
     assert(oSymTable != NULL);
+    assert (pcKey != NULL);
 
     /* Find pcKey and replace its value with pvValue */
     for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
@@ -173,8 +181,8 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
         
     }
     /* If other node contains pcKey, remove that node */
-    psPreviousNode = NULL;
-    for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
+    psPreviousNode = oSymTable->psFirstNode;
+    for (psCurrentNode = oSymTable->psFirstNode->next; psCurrentNode != NULL; 
                                            psCurrentNode = psNextNode) {
         psNextNode = psCurrentNode->next;
         if ((strcmp(psCurrentNode->pcKey, pcKey)) == 0) {      
@@ -198,8 +206,10 @@ void SymTable_map(SymTable_T oSymTable,
 
     struct SymTableNode *psCurrentNode;
     struct SymTableNode *psNextNode;
+    
 
     assert(oSymTable != NULL);
+    assert(*pfApply != NULL);
 
     for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
                                            psCurrentNode = psNextNode) {
