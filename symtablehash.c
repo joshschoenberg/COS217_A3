@@ -77,7 +77,7 @@ But, the bindings are in the correct bucket */
     /* Add in all of the buckets to new the correct spot */
     /* Go through each bucket, and determine what the new bucket is */
     oldSymTableBucketIndex = 0;
-    while( oldSymTableBucketIndex < oSymTable->uBucketCount) {
+    while(oldSymTableBucketIndex < oSymTable->uBucketCount) {
         /* If bucket is empty, move to the next bucket */
         if (oSymTable->buckets[oldSymTableBucketIndex] == NULL) {
             oldSymTableBucketIndex++;
@@ -90,7 +90,7 @@ But, the bindings are in the correct bucket */
     /* Free the old hash table's buckets */ 
     free(oSymTable->buckets);
     /* Set oSymTable's buckets be the new hashtable */
-    oSymTable->buckets = newBuckets[0];
+    oSymTable->buckets = newBuckets;
     oSymTable->uBucketCount = newBucketCount;
     return;
 }
