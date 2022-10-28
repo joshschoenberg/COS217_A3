@@ -87,7 +87,7 @@ But, the bindings are in the correct bucket */
             psNextBinding = psCurrentBinding->next;
             /* Set current binding's next to be first binding in bucket */
             newSymTableBucketIndex = SymTable_hash(psCurrentBinding->pcKey, newBucketCount);
-            psCurrentBinding->next = oSymTable->buckets[newSymTableBucketIndex]; /* WHAT'S WRONG WITH THIS?? */
+            psCurrentBinding->next = newBuckets[newSymTableBucketIndex]; /* WHAT'S WRONG WITH THIS?? */
             /* Set first binding of bucket to be current binding */
             newBuckets[newSymTableBucketIndex] = psCurrentBinding;
             oldSymTableBucketIndex++;
