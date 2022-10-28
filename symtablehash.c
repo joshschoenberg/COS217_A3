@@ -63,15 +63,11 @@ static void SymTable_expand(SymTable_T oSymTable) {
             return;
         /* Set the newBucketCount to be the next one */
         if (auBucketCounts[auBucketCountsIndex] == oSymTable->uBucketCount) {
-            newBucketCount = auBucketCounts[auBucketCountsIndex + 1];
             break;
         }
         auBucketCountsIndex++;
     }
-    /* Leave the function if, for some reason, newBucketCount does not 
-    get initialized */ 
-    if (newBucketCount == NULL)
-        return;
+    newBucketCount = auBucketCounts[auBucketCountsIndex + 1];
 
     /* Create a new hash table, which is a copy of the old one, but with  
     a new size. The SymTable is still the same, though. But, the 
