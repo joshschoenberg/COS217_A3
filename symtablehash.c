@@ -87,18 +87,19 @@ But, the bindings are in the correct bucket */
             psNextBinding = psCurrentBinding->next;
             /* Set current binding's next to be first binding in bucket */
             newSymTableBucketIndex = SymTable_hash(psCurrentBinding->pcKey, newBucketCount);
-            psCurrentBinding->next = newBuckets[newSymTableBucketIndex]; /* WHAT'S WRONG WITH THIS?? */
+            psCurrentBinding->next = newBuckets[newSymTableBucketIndex]; 
             /* Set first binding of bucket to be current binding */
             newBuckets[newSymTableBucketIndex] = psCurrentBinding;
-            oldSymTableBucketIndex++;
         }
+        oldSymTableBucketIndex++;
+
+    }
     /* Free the old hash table's buckets */ 
     free(oSymTable->buckets);
     /* Set oSymTable's buckets be the new hashtable */
     oSymTable->buckets = newBuckets;
     oSymTable->uBucketCount = newBucketCount;
     return;
-    }
 }
 SymTable_T SymTable_new(void) {
     SymTable_T oSymTable;
