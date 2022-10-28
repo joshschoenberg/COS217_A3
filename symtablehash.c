@@ -184,9 +184,9 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
     oSymTable->bindingsCount += 1;
 
     /* Expand the number of buckets, if necessary. */
-    /* if ((oSymTable->bindingsCount) > (oSymTable->uBucketCount)) {
+    if ((oSymTable->bindingsCount) > (oSymTable->uBucketCount)) {
         SymTable_expand(oSymTable);
-    } */
+    } 
     return 1;
 }
 
