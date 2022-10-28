@@ -204,6 +204,7 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
     size_t uBucketIndex;
 
     assert(oSymTable != NULL);
+    assert(pcKey != NULL);
 
     /* Find pcKey and replace its value with pvValue */
     uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
@@ -272,7 +273,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     /* If symbol table is empty, return NULL */
     if (oSymTable->buckets == NULL) 
         return NULL;
-    /* If bucket is emty, return NULL */
+    /* If bucket is empty, return NULL */
     uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
     if (oSymTable->buckets[uBucketIndex] == NULL)
         return NULL;
@@ -288,8 +289,8 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
         return oldValue;
     }
     /* If other binding contains pcKey, remove that binding */
-    psPreviousBinding = NULL;
-    for (psCurrentBinding = oSymTable->buckets[uBucketIndex]; psCurrentBinding != NULL; 
+    psPreviousBinding = oSymTable->buckets[uBucketIndex];
+    for (psCurrentBinding = oSymTable->buckets[uBucketIndex]->next; psCurrentBinding != NULL; 
                                            psCurrentBinding = psNextBinding) {
         psNextBinding = psCurrentBinding->next;
         if ((strcmp(psCurrentBinding->pcKey, pcKey)) == 0) {      
