@@ -45,7 +45,7 @@ static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
     /* Determine size_t SymTable_expansion () {  what the index of the buckets should be and return that.
         Then, use that index as the index to create a new hash table. */
 
-static SymTable_T void SymTable_expand(SymTable_T oSymTable) {
+static SymTable_T SymTable_expand(SymTable_T oSymTable) {
     struct SymTableBinding **newBuckets;
     size_t auBucketCountsIndex;
     size_t oldSymTableBucketIndex;
