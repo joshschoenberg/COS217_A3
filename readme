@@ -84,7 +84,23 @@ What warnings does critTer generate on symtablehash.c, and what are your
 disagreements with them? Copy the critTer warnings here, and express
 your disagreement after each warning. If there are no warnings, then
 write "None."
-
+symtablelist.c: line 59: medium priority:
+Do you want to validate 'pvValue' through an assert?
+    As we have mentioned, pvValue does NOT need to be validated that it 
+    is not NULL. pvValue does not need to have a value, since we do not 
+    (and canot because we do not know its type) even attempt to 
+    dereference pvValue in SymTable_put. Moreover, it is even possible 
+    for pvValue to be equal to NULL. 
+    
+symtablelist.c: line 102: medium priority:
+Do you want to validate 'pvValue' through an assert?
+    As we have mentioned, pvValue does NOT need to be validated that it 
+    is not NULL. 
+symtablelist.c: line 205: medium priority:
+Do you want to validate 'pvExtra' through an assert?
+        As we saw in precept, pvExtra, in fact, CAN be NULL, as 
+        SymTable_Map does not attempt to dereference it. Therefore,  it 
+        does not need to be validated through an assert.
 
 
 ------------------------------------------------------------------------
@@ -94,11 +110,11 @@ implementation, (2) your non-expanding hash table implementation, and
 (3) your expanding hash table implementation? Fill in the blanks.
 
 The linked list implementation with:
--- 50 bindings consumed ________ seconds.
--- 500 bindings consumed ________ seconds.
--- 5000 bindings consumed ________ seconds.
--- 50000 bindings consumed ________ seconds.
--- 500000 bindings consumed ________ seconds.
+-- 50 bindings consumed ____0.000000____ seconds.
+-- 500 bindings consumed ____0.003368____ seconds.
+-- 5000 bindings consumed ____1.084772____ seconds.
+-- 50000 bindings consumed ____107.078046____ seconds.
+-- 500000 bindings consumed ___More than 5 minutes._____ seconds.
 
 The non-expanding hash table implementation with:
 -- 50 bindings consumed ________ seconds.
@@ -108,8 +124,8 @@ The non-expanding hash table implementation with:
 -- 500000 bindings consumed ________ seconds.
 
 The expanding hash table implementation with:
--- 50 bindings consumed ________ seconds.
--- 500 bindings consumed ________ seconds.
--- 5000 bindings consumed ________ seconds.
--- 50000 bindings consumed ________ seconds.
--- 500000 bindings consumed ________ seconds.
+-- 50 bindings consumed __0.000000______ seconds.
+-- 500 bindings consumed ___0.000000_____ seconds.
+-- 5000 bindings consumed ____0.007270____ seconds.
+-- 50000 bindings consumed __0.133673______ seconds.
+-- 500000 bindings consumed __1.759755______ seconds.
