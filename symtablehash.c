@@ -130,7 +130,8 @@ SymTable_T SymTable_new(void) {
     if(oSymTable == NULL) {
         return NULL;
         }
-    /* Allocate space for the array of buckets */
+    /* Allocate space for the array of buckets, with the number of 
+    buckets being 509 (auBucketCounts[0]) */
     oSymTable->buckets = (struct SymTableBinding**) calloc(auBucketCounts[0], 
                                      sizeof(struct SymTableBinding *));
     if (oSymTable->buckets == NULL) {
@@ -224,6 +225,7 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
     if ((oSymTable->bindingsCount) > (oSymTable->uBucketCount)) {
         SymTable_expand(oSymTable);
     } 
+    /* When SymTable_put is successful, return 1 */ 
     return 1;
 }
 
