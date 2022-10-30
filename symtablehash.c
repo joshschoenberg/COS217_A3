@@ -141,7 +141,7 @@ void SymTable_free(SymTable_T oSymTable) {
         for (psCurrentBinding = oSymTable->buckets[bucketCountIndex]; psCurrentBinding != NULL; 
                                            psCurrentBinding = psNextBinding) {
         psNextBinding = psCurrentBinding->next;
-        free(psCurrentBinding->pcKey); 
+        free((char *) psCurrentBinding->pcKey); 
         free(psCurrentBinding);
     }
     bucketCountIndex++;
