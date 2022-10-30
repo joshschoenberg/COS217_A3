@@ -320,6 +320,7 @@ void SymTable_map(SymTable_T oSymTable,
     size_t bucketCountIndex;
 
     assert(oSymTable != NULL);
+    assert(*pfApply != NULL);
 
     bucketCountIndex = 0;
     /* Go through every bucket */
