@@ -12,6 +12,25 @@ in the "Policies" web page (also available on armlab in the file
 ~cos217/AuthorizedSourcesList ) to this section of the readme file,
 and edit it as appropriate.
 
+The course's lectures.
+
+The course's precepts.
+
+The course's website.
+
+Documents that are referenced directly by the course's website. 
+Such documents include the course's lecture slides and precept handouts.
+
+The man pages on the armlab cluster.
+
+The course's current staff members outside of class time through office 
+hours.
+
+The course's current staff members outside of class time through Ed.
+
+The course's current staff members outside of class time through e-mail.
+
+Current Intro Lab TAs through visits to the Intro COS Lab
 
 
 ------------------------------------------------------------------------
@@ -26,11 +45,13 @@ interaction, may additionally require the interaction being reported
 to the Committee on Discipline. Write "None" if you used no
 unauthorized sources of information.
 
+None.
 
 
 ------------------------------------------------------------------------
 What is your assessment of the assignment? Was it helpful? Was it fun?
-
+I thought it was very fun to think through the expansion, and it was a 
+helpful assignment.
 
 
 ------------------------------------------------------------------------
@@ -117,11 +138,11 @@ The linked list implementation with:
 -- 500000 bindings consumed ___More than 5 minutes._____ seconds.
 
 The non-expanding hash table implementation with:
--- 50 bindings consumed ________ seconds.
--- 500 bindings consumed ________ seconds.
--- 5000 bindings consumed ________ seconds.
--- 50000 bindings consumed ________ seconds.
--- 500000 bindings consumed ________ seconds.
+-- 50 bindings consumed ___0.000000_____ seconds.
+-- 500 bindings consumed ___0.000000_____ seconds.
+-- 5000 bindings consumed ___0.012060_____ seconds.
+-- 50000 bindings consumed ___0.379702_____ seconds.
+-- 500000 bindings consumed ____70.370616____ seconds.
 
 The expanding hash table implementation with:
 -- 50 bindings consumed __0.000000______ seconds.
