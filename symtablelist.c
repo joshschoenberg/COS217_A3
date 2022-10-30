@@ -19,15 +19,21 @@ struct SymTableNode {
     struct SymTableNode *next;
     };
 
-
+/* A SymTable contains a pointer to the first SymTableNode, and the 
+number of bindings in the symbol table */
 struct SymTable {
+    /* A pointer to the first node */
     struct SymTableNode *psFirstNode;
+    /* The number of bindings in the symbol table */
     size_t symTableSize;
     };
+
+/*--------------------------------------------------------------------*/
 
 SymTable_T SymTable_new(void) {
     SymTable_T oSymTable;
     oSymTable = (SymTable_T) calloc(1, sizeof(struct SymTable));
+    /* Return NULL if not enough space available */
     if(oSymTable == NULL) {
         return NULL;
         }
@@ -35,25 +41,31 @@ SymTable_T SymTable_new(void) {
     return oSymTable;
 }
 
+/*--------------------------------------------------------------------*/
+
 void SymTable_free(SymTable_T oSymTable) {
     struct SymTableNode *psCurrentNode;
     struct SymTableNode *psNextNode;
 
     assert(oSymTable != NULL);
-
+    /* Go through each node, freeing each one and its key */
     for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
                                            psCurrentNode = psNextNode) {
         psNextNode = psCurrentNode->next;
-        free((char *) psCurrentNode->pcKey); 
+        free(psCurrentNode->pcKey); 
         free(psCurrentNode);
     }
     free (oSymTable);
 }
 
+/*--------------------------------------------------------------------*/
+
 size_t SymTable_getLength(SymTable_T oSymTable) {
     assert(oSymTable != NULL);
     return oSymTable->symTableSize;
 }
+
+/*--------------------------------------------------------------------*/
 
 int SymTable_put(SymTable_T oSymTable, const char *pcKey, 
                                                   const void *pvValue) {
@@ -98,6 +110,8 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
     return 1;
 }
 
+/*--------------------------------------------------------------------*/
+
 void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
     const void *pvValue) {
 
@@ -122,6 +136,8 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
     return NULL;
 }
 
+/*--------------------------------------------------------------------*/
+
 int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     struct SymTableNode *psCurrentNode;
     struct SymTableNode *psNextNode;
@@ -141,6 +157,8 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     return 0;
 }
 
+/*--------------------------------------------------------------------*/
+
 void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
     struct SymTableNode *psCurrentNode;
     struct SymTableNode *psNextNode;
@@ -157,6 +175,8 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
     /* If key is not in symbol table, return NULL. */
     return NULL;
 }
+
+/*--------------------------------------------------------------------*/
 
 void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
    
@@ -200,6 +220,9 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     /* If pcKey does not apear in Symbol Table, return NULL. */
     return NULL;
 }
+
+/*--------------------------------------------------------------------*/
+
 void SymTable_map(SymTable_T oSymTable,
     void (*pfApply)(const char *pcKey, void *pvValue, void *pvExtra),
     const void *pvExtra) {
@@ -217,7 +240,3 @@ void SymTable_map(SymTable_T oSymTable,
         (*pfApply) (psCurrentNode->pcKey, psCurrentNode->pvValue, (void *) pvExtra);
     }
 }
-
-/* int  main (void) {
-
-} */

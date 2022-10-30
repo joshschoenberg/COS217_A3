@@ -33,7 +33,8 @@ pcKey, add a new binding to oSymTable consisting of key pcKey and value
 pvValue, and return 1. 
 Otherwise (or if insufficient memory is available), leave oSymTable 
 unchanged and return 0. */
-int SymTable_put(SymTable_T oSymTable, const char *pcKey, const void *pvValue);
+int SymTable_put(SymTable_T oSymTable, const char *pcKey, 
+    const void *pvValue);
 
 /*--------------------------------------------------------------------*/
 
