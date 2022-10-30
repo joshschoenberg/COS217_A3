@@ -106,7 +106,8 @@ static void SymTable_expand(SymTable_T oSymTable) {
             /* Keep track of next binding */
             psNextBinding = psCurrentBinding->next;
             /* Set current binding's next to be first binding in bucket */
-            newSymTableBucketIndex = SymTable_hash(psCurrentBinding->pcKey, newBucketCount);
+            newSymTableBucketIndex = 
+                SymTable_hash(psCurrentBinding->pcKey, newBucketCount);
             psCurrentBinding->next = newBuckets[newSymTableBucketIndex]; 
             /* Set first binding of bucket to be current binding */
             newBuckets[newSymTableBucketIndex] = psCurrentBinding;
@@ -198,7 +199,8 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
     /* Put key and value in correct bucket */                                                
     uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
 
-    psNewBinding = (struct SymTableBinding*)calloc(1, sizeof(struct SymTableBinding)); 
+    psNewBinding = (struct SymTableBinding*)calloc(1, 
+                                        sizeof(struct SymTableBinding)); 
     /* If insufficient mememory, return 0. */
     if (psNewBinding == NULL)
         return 0;
@@ -243,8 +245,9 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
 
     /* Find pcKey and replace its value with pvValue */
     uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
-    for (psCurrentBinding = oSymTable->buckets[uBucketIndex]; psCurrentBinding != NULL; 
-                                           psCurrentBinding = psNextBinding) {
+    for (psCurrentBinding = oSymTable->buckets[uBucketIndex]; 
+            psCurrentBinding != NULL; psCurrentBinding = psNextBinding) {
+
         psNextBinding = psCurrentBinding->next;
         if ((strcmp(psCurrentBinding->pcKey, pcKey)) == 0) {
             void *oldValue = psCurrentBinding->pvValue;
@@ -364,9 +367,11 @@ void SymTable_map(SymTable_T oSymTable,
     bucketCountIndex = 0;
     /* Go through every bucket */
     while (bucketCountIndex < oSymTable->uBucketCount) {
-        /* Go through every binding within each bucket, applying pfApply to each one */
-        for (psCurrentBinding = oSymTable->buckets[bucketCountIndex]; psCurrentBinding != NULL; 
-                                           psCurrentBinding = psNextBinding) {
+        /* Go through every binding within each bucket, applying pfApply 
+            to each one */
+        for (psCurrentBinding = oSymTable->buckets[bucketCountIndex]; 
+                psCurrentBinding != NULL; psCurrentBinding = psNextBinding) {
+
         psNextBinding = psCurrentBinding->next;
         (*pfApply) (psCurrentBinding->pcKey, psCurrentBinding->pvValue, (void *) pvExtra);
         }
