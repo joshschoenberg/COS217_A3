@@ -62,6 +62,7 @@ void SymTable_free(SymTable_T oSymTable) {
 
 size_t SymTable_getLength(SymTable_T oSymTable) {
     assert(oSymTable != NULL);
+    /* Return the symbol table size */
     return oSymTable->symTableSize;
 }
 
@@ -237,6 +238,7 @@ void SymTable_map(SymTable_T oSymTable,
     for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
                                            psCurrentNode = psNextNode) {
         psNextNode = psCurrentNode->next;
-        (*pfApply) (psCurrentNode->pcKey, psCurrentNode->pvValue, (void *) pvExtra);
+        (*pfApply) (psCurrentNode->pcKey, psCurrentNode->pvValue, 
+                                                      (void *) pvExtra);
     }
 }
