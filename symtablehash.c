@@ -8,7 +8,7 @@
 #include "symtable.h"
 #include <string.h>
 
-/* Array of different bucket counts */
+/* auBucketCounts[] is an array of different bucket counts */
 static const size_t auBucketCounts[] = {509, 1021, 2039, 4093, 8191, 
                                                    16381, 32749, 65521};
 
@@ -35,9 +35,10 @@ struct SymTable {
     struct SymTableBinding **buckets;
     };
 
-/* Return a hash code for pcKey that is between 0 and uBucketCount-1,
-   inclusive. */
+/*--------------------------------------------------------------------*/
 
+/* SymTable_hash returns a hash code for pcKey that is between 0 and 
+uBucketCount-1, inclusive. */
 static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
 {
    const size_t HASH_MULTIPLIER = 65599;
@@ -54,9 +55,11 @@ static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
 
 /*--------------------------------------------------------------------*/
 
-/* SymTable_expand expands SymTable_T oSymTable to be the size of the
-next bucket size in auBucketCounts[], and it places each node in the 
-correct bucket of the new hash table */ 
+/* SymTable_expand expands SymTable_T oSymTable to have a hash table 
+with a bucket size of the next bucket size in auBucketCounts[], and it 
+places each node in the correct bucket of the new hash table. If the 
+current bucket size is the last one in auBucketCounts[] SymTable_expand 
+does not change oSymTable */ 
 
 static void SymTable_expand(SymTable_T oSymTable) {
     struct SymTableBinding *psCurrentBinding;
@@ -64,18 +67,19 @@ static void SymTable_expand(SymTable_T oSymTable) {
     struct SymTableBinding **newBuckets;
     size_t auBucketCountsIndex;
     size_t oldSymTableBucketIndex;
-    /* size_t newBucketCountIndex; */
     size_t newBucketCount;
     size_t newSymTableBucketIndex;
     /* Defines the number of bucket counts */
-    size_t numBucketCounts = sizeof(auBucketCounts)/sizeof(auBucketCounts[0]);
+    size_t numBucketCounts = 
+        sizeof(auBucketCounts)/sizeof(auBucketCounts[0]);
     auBucketCountsIndex = 0;
     while (auBucketCountsIndex < numBucketCounts) {
         /* If it's the last one, do not change the sym table */
         if (auBucketCountsIndex == numBucketCounts - 1)
             return;
         /* Set the newBucketCount to be the next one */
-        if (auBucketCounts[auBucketCountsIndex] == oSymTable->uBucketCount) {
+        if (auBucketCounts[auBucketCountsIndex] == 
+                oSymTable->uBucketCount) {
             break;
         }
         auBucketCountsIndex++;
@@ -85,7 +89,8 @@ static void SymTable_expand(SymTable_T oSymTable) {
     /* Create a new hash table, which is a copy of the old one, but with  
     a new size. The SymTable is still the same, though. But, the 
     bindings are in the correct bucket */
-    newBuckets = (struct SymTableBinding **) calloc(newBucketCount, sizeof(struct SymTableBinding *));
+    newBuckets = (struct SymTableBinding **) calloc(newBucketCount, 
+                        sizeof(struct SymTableBinding *));
     if(newBuckets == NULL) {
         return;
         }
@@ -94,9 +99,10 @@ static void SymTable_expand(SymTable_T oSymTable) {
     /* Go through each bucket, and determine what the new bucket is */
     oldSymTableBucketIndex = 0;
     while(oldSymTableBucketIndex < oSymTable->uBucketCount) {
-        /* If bucket is empty, move to the next bucket. Otherwise, go through bucket */
-        for (psCurrentBinding = oSymTable->buckets[oldSymTableBucketIndex]; psCurrentBinding != NULL; 
-                                           psCurrentBinding = psNextBinding) {
+        /* If bucket is empty, move to the next bucket. Otherwise, go 
+                                                       through bucket */
+        for (psCurrentBinding = oSymTable->buckets[oldSymTableBucketIndex]; 
+            psCurrentBinding != NULL; psCurrentBinding = psNextBinding) {
             /* Keep track of next binding */
             psNextBinding = psCurrentBinding->next;
             /* Set current binding's next to be first binding in bucket */
@@ -124,8 +130,9 @@ SymTable_T SymTable_new(void) {
     if(oSymTable == NULL) {
         return NULL;
         }
-    /* HOW CAN WE GENERALIZE auBucketCounts to create a new hash table of any size?? */
-    oSymTable->buckets = (struct SymTableBinding**) calloc(auBucketCounts[0] , sizeof(struct SymTableBinding *)) ;
+    /* Allocate space for the array of buckets */
+    oSymTable->buckets = (struct SymTableBinding**) calloc(auBucketCounts[0], 
+                                     sizeof(struct SymTableBinding *));
     if (oSymTable->buckets == NULL) {
         free(oSymTable);
         return NULL;
@@ -145,11 +152,11 @@ void SymTable_free(SymTable_T oSymTable) {
 
     assert(oSymTable != NULL);
     bucketCountIndex = 0;
-    /* Go through every BUCKET */
+    /* Go through every bucket */
     while (bucketCountIndex < oSymTable->uBucketCount) {
         /* Go through every binding within each bucket, freeing each one */
-        for (psCurrentBinding = oSymTable->buckets[bucketCountIndex]; psCurrentBinding != NULL; 
-                                           psCurrentBinding = psNextBinding) {
+        for (psCurrentBinding = oSymTable->buckets[bucketCountIndex]; 
+                psCurrentBinding != NULL; psCurrentBinding = psNextBinding) {
         psNextBinding = psCurrentBinding->next;
         free((char *) psCurrentBinding->pcKey); 
         free(psCurrentBinding);
@@ -166,6 +173,7 @@ void SymTable_free(SymTable_T oSymTable) {
 
 size_t SymTable_getLength(SymTable_T oSymTable) {
     assert(oSymTable != NULL);
+    /* Return the number of bindings in oSymTable */
     return oSymTable->bindingsCount;
 }
 
@@ -258,8 +266,8 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     assert(pcKey != NULL);
     /* If Symbol table contains pcKey, return 1. */
     uBucketsIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
-    for (psCurrentBinding = oSymTable->buckets[uBucketsIndex]; psCurrentBinding != NULL; 
-                                           psCurrentBinding = psNextBinding) {
+    for (psCurrentBinding = oSymTable->buckets[uBucketsIndex]; 
+            psCurrentBinding != NULL; psCurrentBinding = psNextBinding) {
         psNextBinding = psCurrentBinding->next;
         if ((strcmp(psCurrentBinding->pcKey, pcKey)) == 0) 
             return 1;
@@ -280,8 +288,8 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
 
     /* Search appropriate bucket for the binding */
     uBucketIndex = SymTable_hash(pcKey, oSymTable->uBucketCount);
-    for (psCurrentBinding = oSymTable->buckets[uBucketIndex]; psCurrentBinding != NULL; 
-                                           psCurrentBinding = psNextBinding) {
+    for (psCurrentBinding = oSymTable->buckets[uBucketIndex]; 
+                psCurrentBinding != NULL; psCurrentBinding = psNextBinding) {
         psNextBinding = psCurrentBinding->next;
         if ((strcmp(psCurrentBinding->pcKey, pcKey)) == 0) {
             return psCurrentBinding->pvValue;
@@ -320,8 +328,8 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     }
     /* If other binding contains pcKey, remove that binding */
     psPreviousBinding = oSymTable->buckets[uBucketIndex];
-    for (psCurrentBinding = oSymTable->buckets[uBucketIndex]->next; psCurrentBinding != NULL; 
-                                           psCurrentBinding = psNextBinding) {
+    for (psCurrentBinding = oSymTable->buckets[uBucketIndex]->next; 
+                psCurrentBinding != NULL; psCurrentBinding = psNextBinding) {
         psNextBinding = psCurrentBinding->next;
         if ((strcmp(psCurrentBinding->pcKey, pcKey)) == 0) {      
             void * oldValue = psCurrentBinding->pvValue;
