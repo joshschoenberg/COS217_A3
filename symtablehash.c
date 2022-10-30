@@ -12,16 +12,26 @@
 static const size_t auBucketCounts[] = {509, 1021, 2039, 4093, 8191, 
                                                    16381, 32749, 65521};
 
-/* A SymTableBinding contains 
+/* Each key and value is stored in a SymTableBinding. SymTableBindings
+are linked to form a list. */
 struct SymTableBinding {
+    /* The key */
     const char *pcKey; 
+    /* The value */
     void *pvValue; 
+    /* A pointer to the next SymTableBinding */
     struct SymTableBinding *next;
     };
 
+/* A SymTable contains a pointer to the first bucket (of the array of 
+buckets) in the hash table, the total number of bindings, and the number 
+of buckets */
 struct SymTable {
+    /* The number of bindings */
     size_t bindingsCount;
+    /* The number of buckets in the hash table */
     size_t uBucketCount;
+    /* A pointer to the first bucket of the hash table */
     struct SymTableBinding **buckets;
     };
 
