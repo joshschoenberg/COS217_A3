@@ -41,9 +41,9 @@ static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
    return uHash % uBucketCount;
 } 
 
-/* RESIZE HASHTABLE! */
-    /* Determine size_t SymTable_expansion () {  what the index of the buckets should be and return that.
-        Then, use that index as the index to create a new hash table. */
+/* SymTable_expand expands SymTable_T oSymTable to be the size of the
+next bucket size in auBucketCounts[], and it places each node in the 
+correct bucket of the new hash table */ 
 
 static void SymTable_expand(SymTable_T oSymTable) {
     struct SymTableBinding *psCurrentBinding;
