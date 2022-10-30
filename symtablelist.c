@@ -52,7 +52,7 @@ void SymTable_free(SymTable_T oSymTable) {
     for (psCurrentNode = oSymTable->psFirstNode; psCurrentNode != NULL; 
                                            psCurrentNode = psNextNode) {
         psNextNode = psCurrentNode->next;
-        free(psCurrentNode->pcKey); 
+        free((char *) psCurrentNode->pcKey); 
         free(psCurrentNode);
     }
     free (oSymTable);
