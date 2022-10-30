@@ -12,6 +12,7 @@
 static const size_t auBucketCounts[] = {509, 1021, 2039, 4093, 8191, 
                                                    16381, 32749, 65521};
 
+/* A SymTableBinding contains 
 struct SymTableBinding {
     const char *pcKey; 
     void *pvValue; 
@@ -40,6 +41,8 @@ static size_t SymTable_hash(const char *pcKey, size_t uBucketCount)
 
    return uHash % uBucketCount;
 } 
+
+/*--------------------------------------------------------------------*/
 
 /* SymTable_expand expands SymTable_T oSymTable to be the size of the
 next bucket size in auBucketCounts[], and it places each node in the 
@@ -103,6 +106,8 @@ static void SymTable_expand(SymTable_T oSymTable) {
     return;
 }
 
+/*--------------------------------------------------------------------*/
+
 SymTable_T SymTable_new(void) {
     SymTable_T oSymTable;
     oSymTable = (SymTable_T) calloc(1, sizeof(struct SymTable));
@@ -121,6 +126,8 @@ SymTable_T SymTable_new(void) {
     return oSymTable;
 }
 
+/*--------------------------------------------------------------------*/
+
 void SymTable_free(SymTable_T oSymTable) {
     size_t bucketCountIndex;
     struct SymTableBinding *psCurrentBinding;
@@ -134,7 +141,7 @@ void SymTable_free(SymTable_T oSymTable) {
         for (psCurrentBinding = oSymTable->buckets[bucketCountIndex]; psCurrentBinding != NULL; 
                                            psCurrentBinding = psNextBinding) {
         psNextBinding = psCurrentBinding->next;
-        free((char *) psCurrentBinding->pcKey); 
+        free(psCurrentBinding->pcKey); 
         free(psCurrentBinding);
     }
     bucketCountIndex++;
@@ -145,10 +152,14 @@ void SymTable_free(SymTable_T oSymTable) {
     free(oSymTable);
 }
 
+/*--------------------------------------------------------------------*/
+
 size_t SymTable_getLength(SymTable_T oSymTable) {
     assert(oSymTable != NULL);
     return oSymTable->bindingsCount;
 }
+
+/*--------------------------------------------------------------------*/
 
 int SymTable_put(SymTable_T oSymTable, const char *pcKey, 
                                                   const void *pvValue) {
@@ -198,6 +209,8 @@ int SymTable_put(SymTable_T oSymTable, const char *pcKey,
     return 1;
 }
 
+/*--------------------------------------------------------------------*/
+
 void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
     const void *pvValue) {
     
@@ -224,6 +237,8 @@ void *SymTable_replace(SymTable_T oSymTable, const char *pcKey,
 
     }
 
+/*--------------------------------------------------------------------*/
+
 int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     size_t uBucketsIndex;
     struct SymTableBinding *psCurrentBinding;
@@ -242,6 +257,8 @@ int SymTable_contains(SymTable_T oSymTable, const char *pcKey) {
     /* If table does not contain pcKey, return 0 */
     return 0;
 }
+
+/*--------------------------------------------------------------------*/
 
 void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
     struct SymTableBinding *psCurrentBinding;
@@ -263,6 +280,7 @@ void *SymTable_get(SymTable_T oSymTable, const char *pcKey) {
     /* If key is not in symbol table, return NULL. */
     return NULL;
 }
+/*--------------------------------------------------------------------*/
 
 void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     struct SymTableBinding *psCurrentBinding;
@@ -310,6 +328,7 @@ void *SymTable_remove(SymTable_T oSymTable, const char *pcKey){
     /* If pcKey does not apear in Symbol Table, return NULL. */
     return NULL;
 }
+/*--------------------------------------------------------------------*/
 
 void SymTable_map(SymTable_T oSymTable,
     void (*pfApply)(const char *pcKey, void *pvValue, void *pvExtra),
